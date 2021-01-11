@@ -211,12 +211,12 @@ var builder =
 		var toolBar2 = Ti.UI.createToolbar({
 			extendBackground : false,
 			barColor : '#00ffff',
-			top: 0,
-			//items : [backButtonText, backButton],
+			top: 100,
+			items : [backButtonText, backButton],
 			title: title,
 			subtitle: "base toolbar sample",
-			homeButtonEnabled: true,
-			displayHomeAsUp: true
+			//homeButtonEnabled: true,
+			//displayHomeAsUp: true
 		});
 		mainView.add(toolBar2);
 		return mainView;

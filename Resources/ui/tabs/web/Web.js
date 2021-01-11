@@ -17,7 +17,7 @@ var buttonLocal = uibuilder.buttonRounded("local web", function(){
 	webCtrl.launchWebViewWindow('assets/webs/tutorial/tutorial.html');
 });
 
-var buttonRemote = uibuilder.buttonRounded("local web", function(){
+var buttonRemote = uibuilder.buttonRounded("remote web", function(){
 	webCtrl.launchWebViewWindow('https://www.google.com/');
 });
 //var buttonLocal = uibuilder.buttonRounded("local web", function(){});
