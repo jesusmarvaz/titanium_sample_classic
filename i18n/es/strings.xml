@@ -1,0 +1,17 @@
+<?xml version="1.0", encoding="UTF-8"?>
+<Resources>
+	<string name="location">Localización</string>
+	<string name="notifications">Notificaciones</string>
+	<string name="web">Web</string>
+	<string name="advanced">Avanzado</string>
+	<string name="crud">CRUD</string>
+	<string name="mylocation">Mi posición</string>
+	<string name="location_permission_denied">Permiso de localización denegado</string>
+	<string name="location_permission_granted">Permiso de localización concedido</string>
+	<string name="accuracy">Precisión</string>
+	<string name="frequency">Frecuencia</string>
+	<string name="latitude">Latitud</string>
+	<string name="longitude">Longitud</string>
+	<string name="enter_notification_text">Escribe el texto de la notificación</string>
+	<!--<string name="app_name">titamiumSample</string>-->
+</Resources>

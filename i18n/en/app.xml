@@ -1,0 +1,5 @@
+<Resources>
+	<string name="NSLocationAlwaysUsageDescription">We need to use location services</string>
+	<string name="NSLocationWhenInUseUsageDescription">We need to use location services, but only when the applicatioon is in use</string>
+	<!--<string name="app_name">titamiumSample</string>-->
+</Resources>

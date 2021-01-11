@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "128043304613",
+    "project_id": "titaniumsampleclassic",
+    "storage_bucket": "titaniumsampleclassic.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:128043304613:android:af1394ff503979125cef4c",
+        "android_client_info": {
+          "package_name": "com.kiteris.TitaniumSampleClassic"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "128043304613-3tv9ljbju4vuef33799ajn36v0gnmn91.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kiteris.TitaniumSampleClassic",
+            "certificate_hash": "cce37f08fa039c8807bccbab7b8861f4759d479f"
+          }
+        },
+        {
+          "client_id": "128043304613-oik0c9mr6vqcqvdg5hbo72e6filsu1bh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBIBTIGWbwAxVjVBS8v0WZ5W5nUP5CqEzg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "128043304613-oik0c9mr6vqcqvdg5hbo72e6filsu1bh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

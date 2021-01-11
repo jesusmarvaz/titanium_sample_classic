@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Tutorial creación app Android TV</title>
+        <style>
+</style>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.css" integrity="sha384-yFRtMMDnQtDRO8rLpMIKrtPCD5jdktao2TV19YiZYWMDkUR5GQZR/NOVTdquEx1j" crossorigin="anonymous">
+<link href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item { list-style-type: none; } .task-list-item-checkbox { margin-left: -20px; vertical-align: middle; }
+</style>
+        
+        <script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script>
+        
+    </head>
+    <body class="vscode-light">
+        <h1 id="tutorial-creación-app-android-tv">Tutorial creación app Android TV</h1>
+<h2 id="0-contenidos">0. Contenidos</h2>
+<ol>
+<li><em><strong><a href="#1.-Prop%C3%B3sito">Propósito</a></strong></em></li>
+<li><em><strong><a href="#2.-Preparaci%C3%B3n-de-la-api-con-node.js">Preparación API</a></strong></em>
+<ol>
+<li><em><a href="#Requisitos-previos">Requisitos previos</a></em></li>
+<li><em><a href="#Pasos-prueba-inicial">Pasos prueba inicial</a></em></li>
+<li><em><a href="#Pasos-para-cargar-datos">Pasos para cargar datos</a></em></li>
+</ol>
+</li>
+<li><em><strong><a href="#3.-Preparaci%C3%B3n-del-entorno-en-android">Preparación del entorno en Android</a></strong></em>
+<ol>
+<li><em><a href="#Requisitos-previos-android">Requisitos previos Android</a></em></li>
+<li><em><a href="#PASOS-CREACI%C3%93N-PROYECTO-ANDROID-TV">Pasos creación proyecto Android TV</a></em></li>
+</ol>
+</li>
+</ol>
+<h2 id="1-propósito">1. Propósito</h2>
+<p>Este documento tiene el propósito de ilustrar de manera organizada la creación de una aplicación para Android TV sencilla que sirva de guía inicial para mostrar los pasos, configuraciones y problemas comunes en este tipo de desarrollo.</p>
+<p>Se va a crear una aplicación sencilla para la plataforma Android TV que consuma videos almacenados en un servidor oropio y remoto (<a href="http://themoviedb.org">themoviedb.org</a>). Adicionalmente se indicarán los pasos para conseguir emitir videos a través de un endpoint configurado con Express usando <a href="http://Socket.io">Socket.io</a> en node.js configurado en un VPS a través de Nginx.</p>
+<h2 id="2-preparación-de-la-api-con-nodejs">2. Preparación de la API con node.js</h2>
+<h3 id="requisitos-previos">REQUISITOS PREVIOS</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:right">APLICACIÓN, BIBLIOTECA O RECURSO</th>
+<th style="text-align:left">USO</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right"><code>npm</code></td>
+<td style="text-align:left">Gestor de paquetes de node</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>node.js</code></td>
+<td style="text-align:left">Entorno de ejecución javascript, es el motor de la API</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>filezilla</code></td>
+<td style="text-align:left">(o similar) Software para transmisión de ficheros por sftp entre la máquina local y el servidor</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>nginx</code></td>
+<td style="text-align:left">Programa que se instalará en el VPS y que se encargará de servir la app web del streaming de video.</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>pm2</code></td>
+<td style="text-align:left">Gestor de aplicaciones node que se instalará en el VPS</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>express</code></td>
+<td style="text-align:left">módulo de node para crear los endpoints de la API.</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>body-parser</code></td>
+<td style="text-align:left">Módulo de node a modo de middleware para extraer la información fácilmente del body como un objeto, se configurará para interceptar cada petición y poder obtener de manera transparente los datos</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>socket.io socket.io-stream</code></td>
+<td style="text-align:left">módulo de node para servir el streaming de video o flujos de datos de manera asíncrona, en general (No lo usaremos de momento)</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>Visual Studio Code</code></td>
+<td style="text-align:left">(o similar) Editor de código para crear la aplicación web</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>ssh</code></td>
+<td style="text-align:left">comando para conexión vía ssh (Secure Shell, conexión segura)  mediante el terminal o consola y acceder así a la máquina ubuntu del VPS (en mi caso particular).</td>
+</tr>
+</tbody>
+</table>
+<h3 id="pasos-prueba-inicial">PASOS PRUEBA INICIAL</h3>
+<ol>
+<li>Iniciación de aplicación node con <code>npm init</code></li>
+<li><img src="file:///d:\WORKSPACE\demoAndroidTV\demoAndroidTV_api\html\pages\tutorial\media\02.01npm-init.png" alt="npm init"></li>
+<li>Necesitamos instalar Express y <a href="http://Socket.io">Socket.io</a>, vamos a instalar estos módulos y comprobar que se añaden al fichero package.json <code>npm install express --save</code>, <code>npm install socket.io --save</code> y <code>npm install body-parser --save</code></li>
+<li><img src="file:///d:\WORKSPACE\demoAndroidTV\demoAndroidTV_api\html\pages\tutorial\media\02.02instalation.png" alt="instalación dependencias"></li>
+<li>Creamos fichero app.js y lo editamos en Visual Studio Code</li>
+<li>Creación de las variables e importación (require) de dependencias</li>
+<li><img src="file:///d:\WORKSPACE\demoAndroidTV\demoAndroidTV_api\html\pages\tutorial\media\02.03.png" alt="importación dependencias"></li>
+<li>vamos a probar ya con este ejemplo sencillo que subiremos al servidor con Filezilla para comprobar que se lanza la aplicación. Pero antes debemos crear los directorios y configurar Nginx para que escuche en el puerto determinado:</li>
+<li>Conexión al servidor VPS</li>
+<li><img src="file:///d:\WORKSPACE\demoAndroidTV\demoAndroidTV_api\html\pages\tutorial\media\02.04.png" alt="Conexión vps"></li>
+<li>Creación carpeta proyecto</li>
+<li><img src="file:///d:\WORKSPACE\demoAndroidTV\demoAndroidTV_api\html\pages\tutorial\media\02.05.png" alt="Creación carpeta proyecto"></li>
+<li>Voy a configurar <code>nginx</code> para mapee lo que le venga desde <code>demoandroidtv.ingencode.com</code> al puerto 8092.</li>
+<li><img src="file:///d:\WORKSPACE\demoAndroidTV\demoAndroidTV_api\html\pages\tutorial\media\02.06.png" alt="Image lost"></li>
+<li>El siguiente paso es subir este fichero al directorio de sitios disponibles de nginx ( <code>/etc/nginx/sites-available/</code> ) : como no tengo acceso root por motivos de seguridad, debo subirlo a un directorio con permisos y desde la máquina remota y como super usuario moverlo al destino tras cambiar el propietario y grupo del fichero:</li>
+<li><img src="file:///d:\WORKSPACE\demoAndroidTV\demoAndroidTV_api\html\pages\tutorial\media\02.07.png" alt="Image lost"></li>
+<li><img src="file:///d:\WORKSPACE\demoAndroidTV\demoAndroidTV_api\html\pages\tutorial\media\02.08.png" alt="Image lost"></li>
+<li>y ahora por fin lo movemos a su sitio en el directorio de nginx</li>
+<li><img src="file:///d:\WORKSPACE\demoAndroidTV\demoAndroidTV_api\html\pages\tutorial\media\02.09.png" alt="Image lost"></li>
+<li>Ahora debemos crear un enlace simbólico en <code>/etc/nginx/sites-enabled</code></li>
+<li><img src="file:///d:\WORKSPACE\demoAndroidTV\demoAndroidTV_api\html\pages\tutorial\media\02.10.png" alt="Image lost"></li>
+<li>Es necesario reiniciar el servicio nginx con <code>service nginx restart</code>
+para que surtan los cambios.</li>
+<li>En el VPS hay que crear el subdominio <code>demoandroidtv.ingencode.com</code> para que pueda funcionar la API con esa url base:</li>
+<li><img src="file:///d:\WORKSPACE\demoAndroidTV\demoAndroidTV_api\html\pages\tutorial\media\02.11.png" alt="Image lost"></li>
+<li>También debo configurar el cortafuegos para este subdominio. Y debo configurar el cortafuegos para este subdominio</li>
+<li><img src="file:///d:\WORKSPACE\demoAndroidTV\demoAndroidTV_api\html\pages\tutorial\media\02.12.png" alt="Image lost"></li>
+<li><img src="file:///d:\WORKSPACE\demoAndroidTV\demoAndroidTV_api\html\pages\tutorial\media\02.13.png" alt="Image lost"></li>
+<li>La propagación DNS tarda unos minutos o incluso más.</li>
+<li>Después de que el subdominio esté funcionando, podemos subir la app básica que acabamos de hacer y probar que funciona para poder seguir desarrollando. La subiremos al directorio <code>/var/www/demoandroidtv.ingencode.com</code>, pero sin la carpeta <code>node_modules</code>, ya que lo instalaremos con <code>npm install</code>.</li>
+<li><img src="file:///d:\WORKSPACE\demoAndroidTV\demoAndroidTV_api\html\pages\tutorial\media\02.14.png" alt="Lost image"></li>
+<li><img src="file:///d:\WORKSPACE\demoAndroidTV\demoAndroidTV_api\html\pages\tutorial\media\02.15.png" alt="Lost image"></li>
+<li>El siguiente paso es lanzar la app mediante pm2 (tras habernos conectado vía consola y ssh con el servidor)</li>
+<li><img src="file:///d:\WORKSPACE\demoAndroidTV\demoAndroidTV_api\html\pages\tutorial\media\02.16.png" alt="Lost image"></li>
+<li>con la opción <code>--name</code> damos un nombre al proceso o app, y con <code>--watch</code> hacemos que cualquier cambio en los ficheros haga reiniciar la app.</li>
+<li>Ahora con <code>pm2 logs</code> demoandroidtv podremos visualizar estado, errores y logs de la app creada en tiempo real para hacer debug o controlar su estado. Cada vez que suba un cambio, con <code>--watch</code>, hará reiniciar la app.</li>
+<li><img src="file:///d:\WORKSPACE\demoAndroidTV\demoAndroidTV_api\html\pages\tutorial\media\02.17.png" alt="Lost image"></li>
+<li>Ya podemos probar desde un navegador o desde postman, por ejemplo,  accedo a <code>https://demoandriodtv.ingencode.com/api/</code></li>
+<li><img src="file:///d:\WORKSPACE\demoAndroidTV\demoAndroidTV_api\html\pages\tutorial\media\02.18.png" alt="Lost image"></li>
+<li><img src="file:///d:\WORKSPACE\demoAndroidTV\demoAndroidTV_api\html\pages\tutorial\media\02.19.png" alt="Lost image"></li>
+</ol>
+<h3 id="pasos-para-cargar-datos">PASOS PARA CARGAR DATOS</h3>
+<ol>
+<li>
+<p>Añadimos una ruta que describiremos en un fichero distinto, para tener buenas prácticas si vamos escalando y tener todo más organizado</p>
+</li>
+<li>
+<p>Se define un directorio estático, que partirá de <code>html</code> y albergará la subcarpeta <code>media</code> donde se guardarán los ficheros de video y un <code>json</code> con los metadatos.</p>
+</li>
+<li>
+<p>Definimos cabeceras de respuesta a modo de middleware previo a cada respuesta del servidor</p>
+</li>
+<li>
+<p><img src="file:///d:\WORKSPACE\demoAndroidTV\demoAndroidTV_api\html\pages\tutorial\media\02.20.png" alt="Lost image"></p>
+</li>
+<li>
+<p>el fichero de la ruta,  <code>trailers.route.js</code>, contendrá el método get para arrojar los datos</p>
+</li>
+<li>
+<p><img src="file:///d:\WORKSPACE\demoAndroidTV\demoAndroidTV_api\html\pages\tutorial\media\02.21.png" alt="Lost image"></p>
+</li>
+<li>
+<p>y finalmente el controlador contendrá la sencilla lógica de esta demo para por ejemplo el endpoint GET($ruta_base/api/trailer).</p>
+</li>
+<li>
+<p><img src="file:///d:\WORKSPACE\demoAndroidTV\demoAndroidTV_api\html\pages\tutorial\media\02.22.png" alt="Lost image"></p>
+</li>
+<li>
+<p>En el fichero json podremos guardar metadatos</p>
+</li>
+<li>
+<p><img src="file:///d:\WORKSPACE\demoAndroidTV\demoAndroidTV_api\html\pages\tutorial\media\02.23.png" alt="Lost image"></p>
+</li>
+<li>
+<p>Probamos el endpint GET($ruta_base/api/trailer) con postman</p>
+</li>
+<li>
+<p><img src="file:///d:\WORKSPACE\demoAndroidTV\demoAndroidTV_api\html\pages\tutorial\media\02.24.png" alt="Lost image"></p>
+</li>
+<li>
+<p>Y finalmente consumimos el video con VLC, por ejemplo</p>
+</li>
+<li>
+<p><img src="file:///d:\WORKSPACE\demoAndroidTV\demoAndroidTV_api\html\pages\tutorial\media\02.25.png" alt="Lost image"></p>
+</li>
+<li>
+<p><img src="file:///d:\WORKSPACE\demoAndroidTV\demoAndroidTV_api\html\pages\tutorial\media\02.26.png" alt="Lost image"></p>
+</li>
+</ol>
+<p>Ya tenemos todo listo desde la parte de backend para servir videos desde nuestro propio servidor, ahora toca crear el proyecto de AndroidTV.</p>
+<h2 id="3-preparación-del-entorno-en-android">3. Preparación del entorno en Android</h2>
+<h3 id="requisitos-previos-android">REQUISITOS PREVIOS ANDROID</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:right">APLICACIÓN, BIBLIOTECA O RECURSO</th>
+<th style="text-align:left">USO</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right"><code>Android Studio</code></td>
+<td style="text-align:left">El IDE de Google para desarrollos Android, es el entorno de desarrollo oficial</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>emulador TV</code></td>
+<td style="text-align:left">Debido a que no tengo la suerte de disponer de una TV Android debo optar por esta solución para realizar las pruebas</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>WireframeSketcher</code></td>
+<td style="text-align:left">Software para creación de bocetos de la UI de la aplicación (o similar)</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>LeanBack</code></td>
+<td style="text-align:left">Biblioteca que proporciona funcionalidad estándar para casos de uso comunes en aplicaciones de TV</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>Gimp</code></td>
+<td style="text-align:left">software gratuito de edición de imágenes para crear o editar recursos gráficos que necesitemos para la aplicación</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>retrofit</code></td>
+<td style="text-align:left">librería para consumir datos de una APIREST remota fácilmente y poder deserializar cómodamente las respuestas en objetos locales</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>RxJava</code></td>
+<td style="text-align:left">Con esta librería manerajemos los flujos de datos asíncronos, en combinación con <code>Retrofit</code></td>
+</tr>
+<tr>
+<td style="text-align:right"><code>OkHttp:Logging-interceptor</code></td>
+<td style="text-align:left">Lo usaremos a modo de interceptor en las comunicaciones REST, a modo de log</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>Picasso</code></td>
+<td style="text-align:left">Carga de imágenes</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p><strong>Documentación oficial <a href="https://developer.android.com/training/tv/start/start?hl=es">aquí</a></strong></p>
+<hr>
+<h3 id="pasos-creación-proyecto-android-tv">PASOS CREACIÓN PROYECTO ANDROID TV</h3>
+<ul>
+<li>Creación de un nuevo proyecto, voy en principio a usar compatibilidad máxima</li>
+</ul>
+<p><img src="file:///d:\WORKSPACE\demoAndroidTV\demoAndroidTV_api\html\pages\tutorial\media\03.01.png" alt="lost image"></p>
+<h3 id="migración-a-androidx">Migración a AndroidX</h3>
+<p>Para ofrecer la máxima compatibilidad con versiones anteriores de la API del SDK de Android, lo recomentable es dejar las antiguas versiones de las librerías de compatibilidad y usar las librerías de <code>AndroidX</code>. Hemos de migrar el proyecto a este entorno antes de empezar a trabajar:</p>
+<p><img src="file:///d:\WORKSPACE\demoAndroidTV\demoAndroidTV_api\html\pages\tutorial\media\03.02.png" alt="lost image"></p>
+<ul>
+<li>Las restricciones iniciales para poder trabajar con AndroidTV son
+<ol>
+<li>Tener actualizado Android Studio es suficiente para asegurar la última versión del SDK (min 24.0.0)
+<ul>
+<li><em>File/Settings/Appareance and behavior/Updates</em></li>
+</ul>
+</li>
+<li>uso de SDK Android 5.0 (API 21) o superior</li>
+</ol>
+</li>
+</ul>
+<h3 id="configuración-común-en-androidmanifestxml"><strong>Configuración común en AndroidManifest.xml</strong></h3>
+<ul>
+<li><strong>LEANBACK</strong> Es recomendable el uso del tema <em>Leanback</em> para brindar compatilidad con dicha librería, que será el estándar en la aplicación que creemos por la fácil integración de componentes compatibles con un uso estándar de navegación en interfaces de TV. Además, las clases de esa librería están pensadas para ser extendidas, es decir heredar de ellas y personalizarlas. Además es obligatorio el uso del <code>intent-filter</code> con LEANBACK_LAUNCHER:</li>
+</ul>
+<blockquote>
+<pre><code><code><div>&lt;activity
+       android:name=&quot;com.example.android.TvActivity&quot;
+       android:label=&quot;@string/app_name&quot;
+       android:theme=&quot;@style/Theme.Leanback&quot;&gt;
+       &lt;intent-filter&gt;
+         &lt;action android:name=&quot;android.intent.action.MAIN&quot; /&gt;
+         &lt;category android:name=&quot;android.intent.category.LEANBACK_LAUNCHER&quot; /&gt;
+       &lt;/intent-filter&gt;
+&lt;/activity&gt;
+</div></code></code></pre>
+</blockquote>
+<p>La aplicación de TV puede declararse como exclusiva para TV que utilice la librería UI de Leanback desde el archivo de manifiesto, <code>AndroidManifest.xml</code>, pero hará que solo se reproduzca en TV, puede ser útil para restringir el uso accidental de la aplicación en tablets u otros dispositivos si no es el <em>target</em> de uso. Esto además hará que se muestre correctamente en la tienda (Google Play Store) como aplicación para TV.</p>
+<blockquote>
+<pre><code><code><div>&lt;manifest&gt;
+       &lt;uses-feature android:name=&quot;android.software.leanback&quot;
+           android:required=&quot;true&quot; /&gt;
+       ...
+&lt;/manifest&gt;
+</div></code></code></pre>
+</blockquote>
+<p>Por último, en el fichero <strong>build.gradle</strong> de la aplicación, podemos observar y editar las dependencias para ir incorporando las librerías que necesitamos, al crear el proyecto para TV se añade automáticamente la librería de soporte de Leanback:</p>
+<blockquote>
+<pre><code><code><div>dependencies {
+   implementation fileTree(dir: &quot;libs&quot;, include: [&quot;*.jar&quot;])
+   implementation &quot;org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version&quot;
+   implementation 'androidx.leanback:leanback:1.0.0'
+}
+</div></code></code></pre>
+</blockquote>
+<ul>
+<li><strong>BANNER</strong> El banner puede definirse a nivel <code>application</code> o a nivel <code>activity</code> y se configura con un fichero <em>drawable</em> que debe tener unas dimensiones de 320 × 180 px y además debe contener texto. Esto hace que si nuestra aplicación está en varios idiomas tengamos que crear distintas versiones del drawable según el idioma.</li>
+</ul>
+<blockquote>
+<pre><code><code><div>&lt;application
+   android:banner=&quot;@drawable/banner&quot; &gt;
+    ...
+</div></code></code></pre>
+</blockquote>
+<p>Existen dos estrategias para lograr crear el banner:</p>
+<ol>
+<li>
+<p>Creación manual de un recurso de 320 x 180px con un texto integrado</p>
+<ul>
+<li>Uso de Gimp para crear un ejemplo de banner</li>
+<li><img src="file:///d:\WORKSPACE\demoAndroidTV\demoAndroidTV_api\html\pages\tutorial\media\03.04.png" alt="lost image"></li>
+<li><img src="file:///d:\WORKSPACE\demoAndroidTV\demoAndroidTV_api\html\pages\tutorial\media\banner.png" alt="lost image"></li>
+</ul>
+</li>
+<li>
+<p>Uso de la herramienta para creación de banner de TV de Android Studio</p>
+<ul>
+<li>Creación de un logo</li>
+<li><img src="file:///d:\WORKSPACE\demoAndroidTV\demoAndroidTV_api\html\pages\tutorial\media\03.03.png" alt="lost image"></li>
+<li>Uso de la herramienta de creación de banner de Android Studio, para dar forma e integrar texto y fondo</li>
+<li><img src="file:///d:\WORKSPACE\demoAndroidTV\demoAndroidTV_api\html\pages\tutorial\media\03.05.png" alt="lost image"></li>
+<li><img src="file:///d:\WORKSPACE\demoAndroidTV\demoAndroidTV_api\html\pages\tutorial\media\03.06.png" alt="lost image"></li>
+</ul>
+</li>
+</ol>
+<p>El desarrollo de una aplicación para ejecutarse en una TV difiere notablemente de la de dispositivos como móviles o tabletas en lo que a hardware y controles se refiere por motivos obvios. Una de las principales diferencias es que la pantalla de una TV no es táctil, no tiene sentido en un uso a unos 3 metros de distancia. La aplicación para TV debe ser compatible con un PAD con controles direccionales, selección, atrás e inicio. Por ello es <strong>OBLIGATORIO</strong> definir explítamente que no dispone de control táctil el dispotivo objetivo (TV):</p>
+<blockquote>
+<pre><code><code><div>&lt;manifest&gt;
+  &lt;uses-feature   android:name=&quot;android.hardware.touchscreen&quot;
+                  android:required=&quot;false&quot;/&gt;
+...
+&lt;/manifest&gt;
+</div></code></code></pre>
+</blockquote>
+<p><strong>EVENTOS del PAD de control de la TV a manejar</strong></p>
+<p><a href="https://developer.android.com/training/tv/start/controllers">documentación oficial controles </a></p>
+<table>
+<thead>
+<tr>
+<th>KeyEvent</th>
+<th>Comportamiento</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BUTTON_B, BACK</td>
+<td>Atrás</td>
+</tr>
+<tr>
+<td>BUTTON_SELECT, BUTTON_A, ENTER, DPAD_CENTER, KEYCODE_NUMPAD_ENTER</td>
+<td>Selección</td>
+</tr>
+<tr>
+<td>DPAD_UP, DPAD_DOWN, DPAD_LEFT, DPAD_RIGHT</td>
+<td>Navegación</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3 id="boceto-de-la-aplicación"><strong>Boceto de la aplicación</strong></h3>
+<p>A continuación se muestra un boceto o sketch de la idea general de la apariencia que tendrá la aplicación que queremos construir:</p>
+<p><img src="file:///d:\WORKSPACE\demoAndroidTV\demoAndroidTV_api\html\pages\tutorial\media\Sketch.png" alt="lost image"></p>
+<h3 id="creación-de-actividad">Creación de actividad</h3>
+<p>Como hemos creado un proyecto sin plantilla, ni siquiera ofrece una actividad inicial, por lo que va a ser necesario crear todo desde 0, lo que puede venir bien para ilustrar cada paso de la creación de la aplicación. En primer lugar voy a crear un paquete llamada <code>ui</code> para albergar ahí las actividades y fragmentos.</p>
+<p>Antes de la edición de la actividad principal, veamos cómo queda el fichero de AndroidManifest.xml, integrando lo indicado anteriormente:</p>
+<blockquote>
+<pre><code><code><div>&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;manifest xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+   package=&quot;com.ingencode.demotv&quot;&gt;
+    &lt;uses-permission android:name=&quot;android.permission.INTERNET&quot; /&gt;
+    &lt;uses-feature
+       android:name=&quot;android.software.leanback&quot;
+       android:required=&quot;true&quot; /&gt;
+    &lt;uses-feature
+       android:name=&quot;android.hardware.touchscreen&quot;
+       android:required=&quot;false&quot; /&gt;
+ 
+    &lt;application
+       android:allowBackup=&quot;true&quot;
+       android:icon=&quot;@mipmap/ic_launcher&quot;
+       android:label=&quot;@string/app_name&quot;
+       android:supportsRtl=&quot;true&quot;
+       android:theme=&quot;@style/Theme.Leanback&quot;
+       android:banner=&quot;@mipmap/ic_banner&quot;&gt;
+       &lt;activity android:name=&quot;.ui.MainActivity&quot;
+             android:configChanges=&quot;keyboard|keyboardHidden|navigation&quot;&gt;
+           &lt;intent-filter&gt;
+               &lt;action android:name=&quot;android.intent.action.MAIN&quot; /&gt;
+               &lt;category android:name=&quot;android.intent.category.LEANBACK_LAUNCHER&quot; /&gt;
+           &lt;/intent-filter&gt;
+       &lt;/activity&gt;
+    &lt;/application&gt;
+&lt;/manifest&gt;
+</div></code></code></pre>
+</blockquote>
+<p>Y la apariencia en el menú de aplicaciones, gracias a la creación del banner es la siguiente:</p>
+<p><img src="file:///d:\WORKSPACE\demoAndroidTV\demoAndroidTV_api\html\pages\tutorial\media\03.07.png" alt="lost image"></p>
+<h3 id="creción-del-fragmento-de-reproducción">Creción del fragmento de reproducción</h3>
+<p>En esta parte se configurará el fragmento de reproducción de la biblioteca <code>Leanback</code>, para ello debemos importar los siguientes componentes:</p>
+<blockquote>
+<pre><code><code><div>import androidx.leanback.app.VideoSupportFragment
+import androidx.leanback.app.VideoSupportFragmentGlueHost
+import androidx.leanback.media.MediaPlayerAdapter
+import androidx.leanback.media.PlaybackGlue
+import androidx.leanback.media.PlaybackTransportControlGlue
+</div></code></code></pre>
+</blockquote>
+<p>Pero antes debemos crear el POJO y DTO que contendrá la información relativa al video, es decir debemos estructurar los datos del video usando una <code>data class</code> de Kotlin por cada elemento, el POJO corresponderá al objeto <em>local</em> mientras que el DTO corresponde al <em>Data Transfer Object</em> que viene desde la API, es importante separar la información:</p>
+<blockquote>
+<pre><code><code><div>data class VideoInfoDto
+    (
+        val id:String? = null,
+        val title:String? = null,
+        val description:String? = null,
+        val year: Int? = null,
+        val url_low_res: String? = null,
+        val url_hi_red: String? = null,
+        val color:String? = null,
+        val genre:String? = null
+    ) : Dto, Serializable
+
+data class VideoInfoPojo
+    (
+        val id:String?,
+        val title:String?,
+        val description:String?,
+        val year:Int?,
+        val urlLowRes:String?,
+        val urlHiRes:String?,
+        val color:String?,
+        val genre:String?
+
+) : Serializable, Pojo
+</div></code></code></pre>
+</blockquote>
+<p>Para trabajar con el objeto local debemos <em>mapearlo</em> desde el objeto DTO, para ello voy a definir unas interfaces que harán a modo de contrato con cada mapper:</p>
+<blockquote>
+<pre><code><code><div>interface Dto
+interface Pojo
+
+interface MapperToDto
+{
+    fun getMapperToDto() : (Pojo) -&gt; Dto
+}
+
+interface MapperToPojo
+{
+    fun getMapperToPojo() : (Dto) -&gt; Pojo
+}
+</div></code></code></pre>
+</blockquote>
+<p>Y el mapeador concreto será:</p>
+<blockquote>
+<pre><code><code><div>object VideoMapper : MapperToDto, MapperToPojo
+{
+    private fun mapToDto(pojo: Pojo): Dto
+    {
+        with(pojo as VideoInfoPojo)
+        {
+            return VideoInfoDto(pojo.id, pojo.title, pojo.description, pojo.year, pojo. urlLowRes,
+            pojo.urlHiRes, pojo.color, pojo.genre)    
+        }        
+    }
+
+    private fun mapToPojo(dto: Dto): Pojo
+    {
+        with(dto as VideoInfoDto)
+        {
+            return VideoInfoPojo(dto.id, dto.title, dto.description, dto.year, dto. url_low_res,
+                dto.url_hi_res, dto.color, dto.genre)
+        }
+    }
+    override fun getMapperToDto(): (Pojo) -&gt; Dto = VideoMapper::mapToDto
+    override fun getMapperToPojo(): (Dto) -&gt; Pojo = VideoMapper::mapToPojo
+}
+</div></code></code></pre>
+</blockquote>
+<p>Ahora ya podemos crear el fragmento de reproducción a partir de Leanback:</p>
+<blockquote>
+<pre><code><code><div>class VideoPlayerFragment : VideoSupportFragment()
+{
+    private lateinit var video: VideoInfoPojo
+    companion object { val TAG = &quot;VideoConsumption&quot; }
+    
+    fun setVideo(video: VideoInfoPojo) { this.video = video }
+
+    override fun onResume()
+    {
+        super.onResume()
+        val playerGlue = PlaybackTransportControlGlue(getActivity(),
+            MediaPlayerAdapter(getActivity())
+        )
+        playerGlue.setHost(VideoSupportFragmentGlueHost(this))
+        playerGlue.addPlayerCallback(object : PlaybackGlue.PlayerCallback() {
+            override fun onPreparedStateChanged(glue: PlaybackGlue) {
+                if (glue.isPrepared()) {
+                    //playerGlue.seekProvider = MySeekProvider()
+                    playerGlue.play()
+                }
+            }
+        })
+        playerGlue.setSubtitle(video.title)
+        playerGlue.setTitle(video.description)
+        playerGlue.getPlayerAdapter().setDataSource(Uri.parse(video.urlHiRes ?: video.urlLowRes))
+    }
+}
+</div></code></code></pre>
+</blockquote>
+<p>Este fragmento contiene los controles de reproducción estilo moderno, gracias a la clase helper <code>PlaybackTransportControlGlue</code>:</p>
+<p><img src="file:///d:\WORKSPACE\demoAndroidTV\demoAndroidTV_api\html\pages\tutorial\media\03.08.png" alt="lost image"></p>
+<h3 id="conexión-con-api">Conexión con API</h3>
+<p>Hasta ahora hemos hemos trabajado con datos mockeados o generados de manera local, pero lo ideal es tabajar online. En esta parte vamos, por tanto, a utilizar las librerías Retrofit, RxJava y OKHttp3 para trabajar con la parte de consumición del servicio API. Para ellos crearemos un paquete llamado <code>common</code> y dentro de este guardaremos otro paquete llamado <code>api</code>:</p>
+<p>Trabajaremos en estas clases, objetos e interfaces:</p>
+<ul>
+<li>Archivo de los endpoints y rutas url, será un objeto, singleton: <code>Routes</code></li>
+</ul>
+<blockquote>
+<pre><code><code><div>object Routes
+{
+    const val BASE_URL = &quot;https://demoandroidtv.ingencode.com&quot;
+    const val API = &quot;/api/&quot;
+    const val BASE_URL_API = &quot;$BASE_URL$API&quot;
+    const val URL_VIDEO_INTRO = &quot;$BASE_URL/media/sample720.mp4&quot;
+    const val EP_TRAILERS = &quot;videodata/videos&quot;
+}
+</div></code></code></pre>
+</blockquote>
+<ul>
+<li>Archivo de definición de llamadas abstractas a la API, será una interfaz: <code>RetrofitApi</code></li>
+</ul>
+<blockquote>
+<pre><code><code><div>interface RetrofitApi
+{
+    @GET(Routes.EP_VIDEOS)
+   fun getVideos() : Single&lt;List&lt;VideoInfoDto&gt;&gt;
+}
+</div></code></code></pre>
+</blockquote>
+<ul>
+<li>Archivo de implementación y configuración de retrofit, será una clase: <code>ServiceOfApi</code>, en este archivo se configura el serializador por defecto, la ruta base de las llamadas rest, el logger a modo de interceptor con okHttp, el adaptador de la llamada rest y se construye a partir de la interfaz definida anteriormente <code>RetrofitApi</code>, retrofit sabrá cuales y cómo ha de configurar los endpoints</li>
+</ul>
+<blockquote>
+<pre><code><code><div>class ServiceOfApi
+{
+    val apiClient: RetrofitApi
+    init
+    {
+        val gson = GsonBuilder()
+            //.registerTypeAdapter(Type::class.java, TypeDeserializer())
+            .create()
+        val apiClientConfig = Retrofit.Builder()
+            .baseUrl(Routes.BASE_URL_API)
+            .addConverterFactory(GsonConverterFactory.create(gson))
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+        setupConfig(apiClientConfig)
+        apiClient = apiClientConfig.build().create(RetrofitApi::class.java)
+    }
+
+    private fun setupConfig(builder: Retrofit.Builder)
+    {
+        val logging = HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY }
+
+        val okHttpClient = OkHttpClient.Builder()
+            .addInterceptor(logging)
+            .build()
+        builder.client(okHttpClient)
+    }
+}
+</div></code></code></pre>
+</blockquote>
+<ul>
+<li>Archivo de implementación de llamadas concretas a la api, será un objeto singleton: <code>Api</code>:</li>
+</ul>
+<blockquote>
+<pre><code><code><div>object Api
+{
+    private val apiService = ServiceOfApi()
+    private val gson = Gson()
+
+    fun getTrailers() : Single&lt;List&lt;VideoInfoDto&gt;&gt;
+    {
+        return apiService.apiClient.getVideos()
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(Schedulers.io())
+    }
+}
+</div></code></code></pre>
+</blockquote>
+<h3 id="creación-de-un-grid-para-mostrar-los-videos">Creación de un Grid para mostrar los videos</h3>
+<p>Ahora vamos a hacer uso de la clase <code>VerticalSupportGridFragment</code> para organizar un set de videos recuperados de nuestra API.</p>
+<p><strong>NOTA</strong>: <em>Hay que añadir un campo más a la información de los videos, será un campo url_background y contendrá la uri de la imagen de fondo de la tarjeta resumen del video, será una imagen jpg de 1280 x 720 px :</em></p>
+
+    </body>
+    </html>

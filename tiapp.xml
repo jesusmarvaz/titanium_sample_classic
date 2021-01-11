@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?><ti:app xmlns:ti="http://ti.appcelerator.org">
+    <id>com.kiteris.TitaniumSampleClassic</id>
+    <name>TitaniumSampleClassic</name>
+    <version>1.0</version>
+    <publisher>jesusmartinvazquez</publisher>
+    <url/>
+    <description>Titanium Sample Classic</description>
+    <copyright>2020 by jesusmartinvazquez</copyright>
+    <icon>appicon.png</icon>
+    <fullscreen>false</fullscreen>
+    <navbar-hidden>false</navbar-hidden>
+    <analytics>true</analytics>
+    <guid>c9012aa6-5248-40e1-9bbb-546fb5d2dbed</guid>
+    <property name="ti.ui.defaultunit" type="string">dp</property>
+    <property name="run-on-main-thread" type="bool">true</property>
+    <ios>
+        <enable-launch-screen-storyboard>true</enable-launch-screen-storyboard>
+        <use-app-thinning>true</use-app-thinning>
+        <plist>
+            <dict>
+                <key>UISupportedInterfaceOrientations~iphone</key>
+                <array>
+                    <string>UIInterfaceOrientationPortrait</string>
+                </array>
+                <key>UISupportedInterfaceOrientations~ipad</key>
+                <array>
+                    <string>UIInterfaceOrientationPortrait</string>
+                    <string>UIInterfaceOrientationPortraitUpsideDown</string>
+                    <string>UIInterfaceOrientationLandscapeLeft</string>
+                    <string>UIInterfaceOrientationLandscapeRight</string>
+                </array>
+                <key>UIRequiresPersistentWiFi</key>
+                <false/>
+                <key>UIPrerenderedIcon</key>
+                <false/>
+                <key>UIStatusBarHidden</key>
+                <false/>
+                <key>UIStatusBarStyle</key>
+                <string>UIStatusBarStyleDefault</string>
+                <key>NSLocationWhenInUseUsageDescription</key>
+                <array>
+                    <string>en</string>
+                    <string>es</string>
+                </array>
+                <key>NSLocationAlwaysUsageDescription</key>
+                <array>
+                    <string>en</string>
+                    <string>es</string>
+                </array>
+            </dict>
+        </plist>
+    </ios>
+    <android xmlns:android="http://schemas.android.com/apk/res/android">
+        <services>
+            <service android:name="AndroidNotiService" type="interval" url="lib/AndroidNotiService.js"/>
+        </services>
+        <manifest android:label="@string/app_name" android:versionCode="1" xmlns:android="http://schemas.android.com/apk/res/android">
+            <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+            <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+            <uses-permission android:name="android.permission.INTERNET" />
+            <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+            <application>
+                <meta-data android:name="com.google.android.maps.v2.API_KEY" android:value="AIzaSyBIBTIGWbwAxVjVBS8v0WZ5W5nUP5CqEzg"/>
+                <!--El servicio en Titanium aquí no, fuera de manifest y encapsulado en <services> ... -><service android:name="AndroidNotiService" url="lib/AndroidNotiService.js" type="interval" />-->
+            </application>
+        </manifest>
+    </android>
+    <modules>
+        <module platform="android">ti.playservices</module>
+        <module>ti.map</module>
+        <module platform="android">hyperloop</module>
+        <module platform="iphone">hyperloop</module>
+        <module platform="iphone">ti.googlemaps</module>
+        <module platform="commonjs">ti.cloud</module>
+        <module platform="android">ti.cloudpush</module>
+    </modules>
+    <deployment-targets>
+        <target device="android">true</target>
+        <target device="ipad">true</target>
+        <target device="iphone">true</target>
+    </deployment-targets>
+    <sdk-version>9.3.0.GA</sdk-version>
+    <property name="appc-app-id" type="string">5ff838929c5d7d48914f4277</property>
+    <property name="acs-authbase-url-development" type="string"/>
+    <property name="acs-base-url-development" type="string">https://api.cloud.appcelerator.com</property>
+    <property name="acs-oauth-secret-development" type="string">OhiJdOCG92kLsMXpxoK7mN2xH1xrYqMd</property>
+    <property name="acs-oauth-key-development" type="string">nqtBhPkVsoqpD7sxEfyyGAZWe7twwnJ3</property>
+    <property name="acs-api-key-development" type="string">HSZl5V6MFLEnjUpa1dGd3Zd0aUfwPSsa</property>
+    <property name="acs-username-development" type="string">appc_app_user_dev</property>
+    <property name="acs-password-development" type="string">cpb25jXtqee1ilKkam</property>
+    <property name="acs-authbase-url-production" type="string"/>
+    <property name="acs-base-url-production" type="string">https://api.cloud.appcelerator.com</property>
+    <property name="acs-oauth-secret-production" type="string">RZAbywkX1yv89oYVzhhtbbQBE3Nntw1U</property>
+    <property name="acs-oauth-key-production" type="string">Ui72y2baYpmhTcPp7BD43BJMjCgTji5T</property>
+    <property name="acs-api-key-production" type="string">Am3qJu1iia67tVmQUoWqXmUqjp6Xt3SH</property>
+    <property name="acs-username-production" type="string">appc_app_user</property>
+    <property name="acs-password-production" type="string">wQqP72qr0xHmF1WMjA</property>
+    <property name="appc-org-id" type="string">88897616391236</property>
+    <property name="appc-creator-user-id" type="string">d30cfc0d-97fe-474c-9060-cf508eaf816e</property>
+</ti:app>
