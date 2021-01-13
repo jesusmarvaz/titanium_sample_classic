@@ -136,12 +136,163 @@ if (Util.isTablet()) {
 }
 ```
 
-**Iconos de la aplicación**
+**Estructura de directorios**
+
+- `Resources`: Carpeta raíz donde se aloja el código de la aplicación, la aplicación empieza por el fichero `app.js`
+    - `lib`: objetos útiles para el proyecto
+    - `android/images/res-land-hdpi...`: Recursos gráficos para android, en código se referenciará el recurso sin extensión y sin la carpeta, el compilador sabrá que recurso elegir en función de la orientación, dpi, etc, en Android.
+    - `android/appicon.png...`: Icono de la aplicación
+    - `android/default.png...`: Imagen aplicación, splash screen.
+    - `iphone/Default.png...`: Imagen aplicación iOS, splash screen.
+    - `assets/images`: libre, imágenes ios *.png, *@2x.png, @3x.png, etc. (en el caso específico de android ubicar en `Resources/android/images/res-land...`)
+    - `model`: libre, objetos que se comunicarán con el backend o base de datos
+    - `ui`: libre, elementos de la interfaz de usuario
+- `platform/android|ios`: Carpeta donde se alojarán recursos de las distintas plataformas
+- `i18n`: carpeta a añadir para trabajar con varios idiomas (en el caso de Alloy cuelga de `Resources`)
+- `modules/iphone/ti.googlemaps/6.1.0`: dentro de módules se agregarán módulos importados, de manera general se organizan así: `modules/platform/nombre_módulo/versión/`
 
 **Splash screen**
 
+Documentación oficial
+
+ https://docs.appcelerator.com/platform/latest/#!/guide/Icons_and_Splash_Screens-section-src-29004897_IconsandSplashScreens-Android
+
+Definida en android como `default.png` y en iOS como `Default.png`, 
+Es posible disponer de varias imágenes y recursos de manera general en función tanto de la orientación, tamaño de pantalla, densidad e idioma, pero varía según la plataforma:
+- Android: `Resources/android/images/res-en|res-es|res-fr-long-land-hdpi|res-long-land-hdpi... / default.png`
+- iOS: `i18n/en|es/Default@2x.png|Default-568h@2x.png|Default-667h@2x.png|Default-Portrait-736h@3x.png|Default-Portrait-2436h@3x.png`
 
 ## Fichero `tiapp.xml`
+----
+
+Fichero de configuración de la aplicación
+
+**Partes comunes**
+```
+<?xml version="1.0" encoding="UTF-8"?><ti:app xmlns:ti="http://ti.appcelerator.org">
+    <id>com.kiteris.TitaniumSampleClassic</id>
+    <name>TitaniumSampleClassic</name>
+    <version>1.0</version>
+    <publisher>jesusmartinvazquez</publisher>
+    <url/>
+    <description>Titanium Sample Classic</description>
+    <copyright>2020 by jesusmartinvazquez</copyright>
+    <icon>appicon.png</icon>
+    <fullscreen>false</fullscreen>
+    <navbar-hidden>true</navbar-hidden>
+    <analytics>true</analytics>
+    <guid>c9012aa6-5248-40e1-9bbb-546fb5d2dbed</guid>
+    <property name="ti.ui.defaultunit" type="string">dp</property>
+    <property name="run-on-main-thread" type="bool">true</property>   
+    <modules>
+        <module platform="android">ti.playservices</module>
+        <module>ti.map</module>
+        <module platform="android">hyperloop</module>
+        <module platform="iphone">hyperloop</module>
+        <module platform="iphone">ti.googlemaps</module>
+        <module platform="commonjs">ti.cloud</module>
+        <module platform="android">ti.cloudpush</module>
+    </modules>
+    <deployment-targets>
+        <target device="android">true</target>
+        <target device="ipad">true</target>
+        <target device="iphone">true</target>
+    </deployment-targets>
+    <sdk-version>9.3.0.GA</sdk-version>
+    <property name="appc-app-id" type="string">5ff838929c5d7d48914f4277</property> 
+    ...
+    </ti:app>
+```
+
+Podemos acceder a las etiquetas `<property>` así: 
+
+```
+var foo = Ti.App.Properties.getString('foo');
+```
+
+Más documentación:
+
+https://docs.appcelerator.com/platform/latest/?print=/api/Titanium.App.Properties
+
+
+**Android**
+```
+<?xml version="1.0" encoding="UTF-8"?><ti:app xmlns:ti="http://ti.appcelerator.org">
+...
+
+    <android xmlns:android="http://schemas.android.com/apk/res/android">
+        <services>
+            <service android:name="AndroidNotiService" type="interval" url="lib/AndroidNotiService.js"/>
+        </services>
+        <manifest android:label="@string/app_name" android:versionCode="1" xmlns:android="http://schemas.android.com/apk/res/android">
+            <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+            <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+            <uses-permission android:name="android.permission.INTERNET" />
+            <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+            <!--<application android:theme="@style/Theme.AppCompat.NoTitleBar">-->
+            	<application>
+                <meta-data android:name="com.google.android.maps.v2.API_KEY" android:value="AIzaSyBIBTIGWbwAxVjVBS8v0WZ5W5nUP5CqEzg"/>
+                <!--El servicio en Titanium aquí no, fuera de manifest y encapsulado en <services> ... -><service android:name="AndroidNotiService" url="lib/AndroidNotiService.js" type="interval" />-->
+            </application>
+        </manifest>
+    </android>
+</ti:app>
+```
+
+**iOS**
+
+```
+<?xml version="1.0" encoding="UTF-8"?><ti:app xmlns:ti="http://ti.appcelerator.org">
+...
+    <enable-launch-screen-storyboard>true</enable-launch-screen-storyboard>
+        <use-app-thinning>true</use-app-thinning>
+        <plist>
+            <dict>
+                <key>UISupportedInterfaceOrientations~iphone</key>
+                <array>
+                    <string>UIInterfaceOrientationPortrait</string>
+                </array>
+                <key>UISupportedInterfaceOrientations~ipad</key>
+                <array>
+                    <string>UIInterfaceOrientationPortrait</string>
+                    <string>UIInterfaceOrientationPortraitUpsideDown</string>
+                    <string>UIInterfaceOrientationLandscapeLeft</string>
+                    <string>UIInterfaceOrientationLandscapeRight</string>
+                </array>
+                <key>UIRequiresPersistentWiFi</key>
+                <false/>
+                <key>UIPrerenderedIcon</key>
+                <false/>
+                <key>UIStatusBarHidden</key>
+                <false/>
+                <key>UIStatusBarStyle</key>
+                <string>UIStatusBarStyleDefault</string>
+                <key>NSLocationWhenInUseUsageDescription</key>
+                <array>
+                    <string>en</string>
+                    <string>es</string>
+                </array>
+                <key>NSLocationAlwaysUsageDescription</key>
+                <array>
+                    <string>en</string>
+                    <string>es</string>
+                </array>
+            </dict>
+        </plist>
+    </ios>
+</ti:app>
+```
+
+Como se puede apreciar, se han incluido string comunes de solicitud de permisos, con soporte para varios idiomas, la clave reside en crear la etiqueta key y debajo un array indicando los idiomas disponibles, estos strings se encuentran en el proyecto, en `Resources/i18n/es|en/app.xml`:
+```
+<Resources>
+	<string name="NSLocationAlwaysUsageDescription">We need to use location services</string>
+	<string name="NSLocationWhenInUseUsageDescription">We need to use location services, but only when the applicatioon is in use</string>
+	<!--<string name="app_name">titamiumSample</string>-->
+</Resources>
+```
+
+
 
 ## Location
 

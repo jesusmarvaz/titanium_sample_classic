@@ -5,6 +5,7 @@ var LocationCtrl = function(){
 			Titanium.Geolocation.getCurrentPosition(function(e) {
         		if (e.error) { 
         			//Ti.API.error('Error: ' + e.error); } //it seems to fail this part
+        		}
         		else {
         			//Ti.API.info(e.coords); //it seems to fail this part
         			alert(self.getStringCoord(e.coords));

@@ -8,7 +8,7 @@
     <copyright>2020 by jesusmartinvazquez</copyright>
     <icon>appicon.png</icon>
     <fullscreen>false</fullscreen>
-    <navbar-hidden>false</navbar-hidden>
+    <navbar-hidden>true</navbar-hidden>
     <analytics>true</analytics>
     <guid>c9012aa6-5248-40e1-9bbb-546fb5d2dbed</guid>
     <property name="ti.ui.defaultunit" type="string">dp</property>
@@ -59,7 +59,8 @@
             <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
             <uses-permission android:name="android.permission.INTERNET" />
             <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-            <application android:theme="@style/Theme.AppCompat.NoTitleBar">
+            <!--<application android:theme="@style/Theme.AppCompat.NoTitleBar">-->
+            	<application>
                 <meta-data android:name="com.google.android.maps.v2.API_KEY" android:value="AIzaSyBIBTIGWbwAxVjVBS8v0WZ5W5nUP5CqEzg"/>
                 <!--El servicio en Titanium aquí no, fuera de manifest y encapsulado en <services> ... -><service android:name="AndroidNotiService" url="lib/AndroidNotiService.js" type="interval" />-->
             </application>
