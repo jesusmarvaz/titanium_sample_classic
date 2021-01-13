@@ -42,7 +42,30 @@ var Util = {
 			datestr += ' ' + date.getHours() + ":" + minutes + ' AM';
 		}
 		return datestr;
-	}
+	},
+	getDpi : function()
+	{
+		var dpi;
+		if(Util.isAndroid()){dpi = Titanium.Platform.displayCaps.xdpi;}
+		else {dpi = Ti.Platform.displayCaps.dpi;}
+		return dpi;
+	},
+	getTabGroupHeightDp : function(){return 65.0;},
+	getScreenHeightDp : function() { return Util.convertPxToDp(Ti.Platform.displayCaps.platformHeight); },
+	getScreenWidthDp : function() { return Util.convertPxToDp(Ti.Platform.displayCaps.platformWidth); },
+	getScreenTabHeightDp : function(){ return Util.getScreenHeightDp() - Util.getTabGroupHeightDp() - 25; },
+	/**
+	 * Converts px magnitude to dp condirering screen dpi automatically
+ 	 * @param {Integer} px - dimension in px to convert
+ 	 * @return {Float}
+	 */
+	convertPxToDp: function(px){ return px * 160 / Util.getDpi(); },
+	/**
+	 * Converts dp magnitude into px rounded to the larger integer less or equal than the number converted
+ 	 * @param {Float} dp
+ 	 * @return {Integer} 
+	 */
+	convertDpToPx: function(dp){ return Math.floor(dp * Util.getDpi() / 160);}
 };
 
 module.exports = Util;

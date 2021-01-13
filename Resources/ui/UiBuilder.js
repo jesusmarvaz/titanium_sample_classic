@@ -120,7 +120,7 @@ var builder =
 		}else{MapModule.setAPIKey('AIzaSyBIBTIGWbwAxVjVBS8v0WZ5W5nUP5CqEzg');}
 		
 		var mapView = MapModule.createView({
-			height: '400px', 
+			height: Util.getScreenWidthDp(), 
 			mapType: MapModule.SATELLITE_TYPE,
     		animate: true,
     		region: { latitude: -0.50537, longitude: 38.359, latitudeDelta: 0.2, longitudeDelta: 0.2 },
@@ -209,14 +209,14 @@ var builder =
 		});
 		
 		var toolBar2 = Ti.UI.createToolbar({
-			extendBackground : false,
+			extendBackground : true,
 			barColor : '#00ffff',
 			top: 100,
-			items : [backButtonText, backButton],
+			items : [backButton],
 			title: title,
 			subtitle: "base toolbar sample",
-			//homeButtonEnabled: true,
-			//displayHomeAsUp: true
+			homeButtonEnabled: true,
+			displayHomeAsUp: true
 		});
 		mainView.add(toolBar2);
 		return mainView;

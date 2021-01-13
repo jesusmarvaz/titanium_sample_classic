@@ -1,27 +1,15 @@
 (function(){
-	var text = Ti.Locale.getString('notifications', '');
-	var colors = require('styles/colors').all;
-	var Util = require('lib/Util').UTIL;
 	var uibuilder = require('ui/UiBuilder');
-
-	var window = Ti.UI.createWindow({
-		title : text,
-		backgroundColor : colors.colorNotifications
-		});
-		
-	var title1 = uibuilder.labelCentered(window, '5dp');
+	var scrollView = Ti.UI.createScrollView({
+		//bottom:'20dp', set by mainView, it depends on actual screen height
+  		layout: 'vertical'
+	});
+	var title1 = uibuilder.labelCentered(scrollView, '5dp');
 	title1.text = Ti.Locale.getString('notifications','');
 	title1.font = {fontSize:22, fontWeight: "bold"};
-	
-	Ctrl = require('ui/tabs/notifications/IOSNotificationCtrl');
-	var ctrl = new Ctrl();
 
 	var top = 35;
-	//var title2 = uibuilder.labelCentered(window, top);
-	//title2.text = Ti.Locale.getString('enter_notification_text','enter_notification_text');
-	//var editText = uibuilder.editText();
-	//editText.top = top + 30;
-	//window.add(editText);
+
 	/**
  * 
  * @param {String} alertAction - if value is 'update' it will appear 'slide to update'
@@ -38,6 +26,7 @@
 		    date: new Date()
 		}); 
 	};
+	//TODO implement proper notifications below
 	var action5Sec = function(){alert("ejemplo");};
 	var actionOpen = function(){alert("ejemplo");};
 
@@ -45,16 +34,16 @@
 	var button5Sec = uibuilder.buttonRounded("5 segundos", action5Sec);
 	var buttonOpen = uibuilder.buttonRounded("abrir app", actionOpen);
 
-	buttonNow.top = top + 80;
-	button5Sec.top = top + 140;
-	buttonOpen.top = top + 200;
-	window.add(buttonNow);
-	window.add(button5Sec);
-	window.add(buttonOpen);
+	buttonNow.top = top;
+	button5Sec.top = top;
+	buttonOpen.top = top;
+	scrollView.add(buttonNow);
+	scrollView.add(button5Sec);
+	scrollView.add(buttonOpen);
 	
 	//Channel subscription (push notifications)
 	
-	var title3 = uibuilder.labelCentered(window, top + 260);
+	var title3 = uibuilder.labelCentered(scrollView, top);
 	title3.text = "Push";
 	title3.font = {fontSize:22, fontWeight: "bold"};
 		/**
@@ -68,7 +57,5 @@
 		else { alert("suscripción anulada");}
 	});*/
 	
-	var tab = Ti.UI.createTab({title:text, icon: 'assets/images/notifications.png', window: window});
-
-	module.exports = tab;
+	module.exports = scrollView;
 }());
