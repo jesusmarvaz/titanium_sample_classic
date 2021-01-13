@@ -122,8 +122,9 @@ var builder =
 		var mapView = MapModule.createView({
 			height: Util.getScreenWidthDp(), 
 			mapType: MapModule.SATELLITE_TYPE,
+			//mapType: MapModule.NORMAL_TYPE,
     		animate: true,
-    		region: { latitude: -0.50537, longitude: 38.359, latitudeDelta: 0.2, longitudeDelta: 0.2 },
+    		region: { latitude: 38.359, longitude: -0.50537, latitudeDelta: 0.2, longitudeDelta: 0.2 },
     		width : Ti.UI.FILL
     		});
 		view.add(mapView);

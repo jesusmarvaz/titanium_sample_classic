@@ -3,9 +3,10 @@ var LocationCtrl = function(){
 	this.tryGetLocation = function(){
 		var getLocation = function(){
 			Titanium.Geolocation.getCurrentPosition(function(e) {
-        		if (e.error) { Ti.API.error('Error: ' + e.error); } 
+        		if (e.error) { 
+        			//Ti.API.error('Error: ' + e.error); } //it seems to fail this part
         		else {
-        			Ti.API.info(e.coords);
+        			//Ti.API.info(e.coords); //it seems to fail this part
         			alert(self.getStringCoord(e.coords));
         		}
    });

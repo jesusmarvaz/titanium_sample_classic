@@ -50,6 +50,7 @@
 	scrollView.add(buttonLocate);
 	
 	if(Util.isIOS()){
+		console.log("pasa");
 		var mapIOS = UIBuilder.iOSMapKit(scrollView);
 		
 	}
