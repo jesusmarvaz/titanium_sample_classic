@@ -73,7 +73,6 @@ sudo rm -rf ˜/Library/Application\ Support/Oracle/Java
 |Wiki Appcelerator| Wiki sobre documentación de Titanium SDK| https://wiki.appcelerator.org/display/guides2/Titanium+SDK|
 |Amplify Dashboard|Panel de control de las aplicaciones|https://platform.axway.com/#/app|
 
-----
 
 # Titanium SDK "know how"
 
@@ -163,7 +162,6 @@ Es posible disponer de varias imágenes y recursos de manera general en función
 - iOS: `i18n/en|es/Default@2x.png|Default-568h@2x.png|Default-667h@2x.png|Default-Portrait-736h@3x.png|Default-Portrait-2436h@3x.png`
 
 ## Fichero `tiapp.xml`
-----
 
 Fichero de configuración de la aplicación
 
