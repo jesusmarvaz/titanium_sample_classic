@@ -143,9 +143,23 @@ var builder =
 			userLocation : true,
 			mapType : MapModule.SATELLITE_TYPE,
 			animate : true,
-			region : { latitude: -0.50537, longitude: 38.359, latitudeDelta: 0.2, longitudeDelta: 0.2 },
+			region : { latitude: 38.359, longitude: -0.60537, latitudeDelta: 0.2, longitudeDelta: 0.2 },
 			width : Ti.UI.FILL
+			,top:10
 		});
+		var alicante = MapModule.createAnnotation({
+						    latitude: 38.359,
+						    longitude: -0.50537,
+						    //centerOffset: { x: 80, y: 25 },
+						    image: 'assets/images/location@3x.png', // 80x80px in this example
+						    title: 'Alicante',
+						    subtitle: 'CV',
+						    // For events, use the Map View's click event
+						    // and monitor the clicksource property for 'rightButton'.   
+						    rightButton: Ti.UI.iOS.SystemButton.CONTACT_ADD
+						});
+		map.annotations = [alicante];
+		view.add(map);
 		return map;
 	},
 	
@@ -190,36 +204,47 @@ var builder =
 		mainView.add(view);
 	},
 	/**
-	 * 
- 	 * @param {String} title - Title to be shown in the toolbar
- 	 * @param {Objecy} window - Window to close with backButton
+	 * @param {String} title - Title to show centered in the customToolbar
+	 * @param {Object} window - Window to close when toolbar backButton is pressed
+	 * @param {String} icon - Path to an optional icon to add (32 x 32)dp
+	 * @return {Object} mainView of the toolbar
 	 */
-	toolBarView : function(title, window){
-		var mainView = Ti.UI.createView({layout: 'vertical'});
-		var backButton = Ti.UI.createButton({backgroundImage: "assets/images/arrow", tintColor: "white"});
-		var backButtonText = Ti.UI.createButton({text: "back"});
-		backButton.addEventListener("click", function(){window.close();});
-		backButtonText.addEventListener("click", function(){window.close();});
-		var toolBar1 = Ti.UI.createToolbar({
-			extendBackground : true,
-			barColor : '#00ffff',
-			top: 00,
-			title: title,
-			homeButtonEnabled: true,
-			subtitle: "base toolbar sample"
+	verticalViewWithToolbar : function(title, window, icon){
+		var Util = require('lib/Util');
+		var screenHeightDp = Util.getScreenHeightDp();
+		var mainView = Ti.UI.createView({layout: 'vertical', height: Ti.UI.FILL, width: Ti.UI.FILL, top:0, backgroundColor: '#000000'});
+		var toolbar = Ti.UI.createView({/*layout: 'horizontal',*/ height: '71dp', width: Ti.UI.FILL, top:0, backgroundColor: '#cfcfcf', zIndex:50, elevation: '8dp'});
+		var bottomBorder = Ti.UI.createView({width: Ti.UI.FILL, height: "1dp", bottom: 0, backgroundColor: '#3fbf81'});
+		var backButton = Ti.UI.createButton(
+		{
+			backgroundImage: "assets/images/arrow", 
+			//tintColor: "white",
+			height: '24dp',
+			width: '24dp',
+			left: '16dp',
+			top: '40dp'
 		});
+
+		var titleTv = Ti.UI.createLabel({text: title, font: {fontSize: 18}, top: '38dp', width: '100%', textAlign: Ti.UI.TEXT_ALIGNMENT_CENTER});
+		toolbar.add(titleTv);
 		
-		var toolBar2 = Ti.UI.createToolbar({
-			extendBackground : true,
-			barColor : '#00ffff',
-			top: 100,
-			items : [backButton],
-			title: title,
-			subtitle: "base toolbar sample",
-			homeButtonEnabled: true,
-			displayHomeAsUp: true
-		});
-		mainView.add(toolBar2);
+		backButton.addEventListener('click', function(e){window.close();});
+		toolbar.add(backButton);
+		if(icon != null)
+		{
+			var iconTv = Ti.UI.createImageView({
+				image : icon,
+				height: '24dp',
+				width: '24dp',
+				left: '8dp',
+				top: '40dp'
+			});
+			toolbar.add(iconTv);
+		}
+		
+		mainView.add(toolbar);
+		mainView.add(bottomBorder);
+		
 		return mainView;
 	}
 };

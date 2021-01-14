@@ -78,9 +78,31 @@ sudo rm -rf ˜/Library/Application\ Support/Oracle/Java
 
 ## Básico
 
+
 `Window` es la vista padre de la que pueden colgar hijos. En la mayoría de casos puede existir una única ventana `Window`, pero en el iPad o tablet Android por ejemplo, hay que tener en cuenta que puede haber vista general y detalle.
 
 La filosofía de creación de las interfaces gráficas en Titanium es bastante simple, todo es javascript y se basa de anidar vistas para ir construyendo los layouts, con atributos pasados a partir de un objeto que contendrá las propiedades de la vista.
+
+**Repositorio de ejemplo**
+
+https://github.com/jfbomber/tiexample
+
+**JSDOC**
+
+Una buena práctica antes de empezar a programar en javascript es documentar bien las funciones que creemos para mejorar su usabilidad: 
+
+https://jsdoc.app/
+
+
+
+```
+/**
+	 * Converts px magnitude to dp condirering screen dpi automatically
+ 	 * @param {Integer} px - dimension in px to convert
+ 	 * @return {Float}
+*/
+function foo(px){...return dp;}
+```
 
 **Creación de la vista inicial**
 ```
@@ -289,6 +311,32 @@ Como se puede apreciar, se han incluido string comunes de solicitud de permisos,
 	<!--<string name="app_name">titamiumSample</string>-->
 </Resources>
 ```
+
+## Event Listener y Fire Events
+
+Se declaran globales o locales a vistas u objetos, en caso de globales cuidado con la cancelación y evitar pérdidas de memoria. 
+
+- Concepto CancelBubble: Se trata de un alias para el método de paro de la propagación de un evento (del hijo al padre, del padre al abuelo...) de Event.stopPropagation().
+
+###  Escuchadores de eventos (Event Listeners)
+
+### Disparador de eventos
+
+Para activar programáticamente un evento y simular, por ejemplo, un click (`click`) o cierre de ventana (`closeWindow`), esto lanzará la función configurada como "EventListener". Ejemplo: `Ti.App.fireEvent('closeWindow');`
+
+- https://developer.mozilla.org/en-US/docs/Web/API/Event/cancelBubble
+
+**Tipos de evento más comunes o utilizados**
+
+
+|EVento|Descripción|Ejemplo implementación|
+|--|--|--|
+|openWindow|Se lanza nueva Activity o View| `Ti.App.addEventListener('openWindow', function(e){...});`|
+|closeWindow|Se lanza nueva Activity o View| `Ti.App.addEventListener('closeWindow', function(e){...});`|
+|click|click sobre una vista| `button.addEventListener('click', function(e){...});`|
+|change|Cambio del valor asociado a un elemento, como un switch o slider| `slider.addEventListener('change', function(e){...});`|
+
+## Elementos gráficos
 
 
 

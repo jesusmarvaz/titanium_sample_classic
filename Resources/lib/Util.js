@@ -1,4 +1,4 @@
-var Util = {
+const Util = {
 	//underscore library
 	_ : require('lib/Underscore'),
 	isIOS : function(){

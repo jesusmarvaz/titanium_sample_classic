@@ -8,7 +8,7 @@
 	title1.text = Ti.Locale.getString('notifications','');
 	title1.font = {fontSize:22, fontWeight: "bold"};
 
-	var top = 35;
+	var top = 20;
 
 	/**
  * 
@@ -52,10 +52,11 @@
 	 * @param {Integer} top - Top margin
 	 * @param {Function} listener - action to respond to switch changes 
 	 */
-	/*var switchSubscribeChannel = uibuilder.switchWithLabel("Suscribirse a canal 'canal_ejemplo'", window, top + 300, function(e){
+	//titleLabel, mainView, top, listener
+	var switchSubscribeChannel = uibuilder.switchWithLabel("Suscribirse a canal 'canal_ejemplo'", scrollView, top, function(e){
 		if(e.value === true){ alert("suscrito a canal_ejemplo");}
 		else { alert("suscripción anulada");}
-	});*/
+	});
 	
 	module.exports = scrollView;
 }());
