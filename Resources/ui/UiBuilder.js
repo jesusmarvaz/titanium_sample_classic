@@ -213,20 +213,28 @@ var builder =
 		var Util = require('lib/Util');
 		var screenHeightDp = Util.getScreenHeightDp();
 		var mainView = Ti.UI.createView({layout: 'vertical', height: Ti.UI.FILL, width: Ti.UI.FILL, top:0, backgroundColor: '#000000'});
-		var toolbar = Ti.UI.createView({/*layout: 'horizontal',*/ height: '71dp', width: Ti.UI.FILL, top:0, backgroundColor: '#cfcfcf', zIndex:50, elevation: '8dp'});
+		var toolbar = Ti.UI.createView({/*layout: 'horizontal',*/ height: '71dp', width: Ti.UI.FILL, top:0, backgroundColor: '#cfcfcf',
+		viewShadowColor: '#3fbf81', viewShadowOffset: {x:0, y:8}, viewShadowRadius: 4, zIndex: 4/*, shadowOpacity: 0.5*/});
+		/*btn.setShadow({
+    shadowRadius:10,
+    shadowOpacity:0.5,
+    shadowOffset:{x:5, y:10}
+});*/
 		var bottomBorder = Ti.UI.createView({width: Ti.UI.FILL, height: "1dp", bottom: 0, backgroundColor: '#3fbf81'});
 		var backButton = Ti.UI.createButton(
 		{
-			backgroundImage: "assets/images/arrow", 
-			//tintColor: "white",
+			image: "assets/images/arrow@3x.png",
+			backgroundImage: "assets/images/arrow@3x.png", 
+			tintColor: "white",
 			height: '24dp',
 			width: '24dp',
 			left: '16dp',
 			top: '40dp'
 		});
 
-		var titleTv = Ti.UI.createLabel({text: title, font: {fontSize: 18}, top: '38dp', width: '100%', textAlign: Ti.UI.TEXT_ALIGNMENT_CENTER});
-		toolbar.add(titleTv);
+		var titleTv = Ti.UI.createLabel({text: title, color: '#000000', font: {fontSize: 18}, 
+			top: '38dp', width: '100%', textAlign: Ti.UI.TEXT_ALIGNMENT_CENTER});
+			toolbar.add(titleTv);
 		
 		backButton.addEventListener('click', function(e){window.close();});
 		toolbar.add(backButton);
@@ -236,7 +244,7 @@ var builder =
 				image : icon,
 				height: '24dp',
 				width: '24dp',
-				left: '8dp',
+				left: '48dp',
 				top: '40dp'
 			});
 			toolbar.add(iconTv);

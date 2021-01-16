@@ -1,6 +1,6 @@
-var text = Ti.Locale.getString('advanced', '');
+var text = Ti.Locale.getString('ui', '');
 var colors = require('styles/colors').all;
-var scrollView = require('ui/tabs/advanced/AdvancedView');
+var scrollView = require('ui/tabs/ui/UIView');
 
 var window = Ti.UI.createWindow({
 	title : text,

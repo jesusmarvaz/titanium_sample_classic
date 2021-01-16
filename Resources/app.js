@@ -12,7 +12,7 @@ function buildTabGroupForIOS()
 	tabGroup.addTab(require('ui/tabs/location/LocationTab'));
 	tabGroup.addTab(require('ui/tabs/notifications/NotificationsTab'));
 	tabGroup.addTab(require('ui/tabs/web/WebTab'));
-	tabGroup.addTab(require('ui/tabs//advanced/AdvancedTab'));
+	tabGroup.addTab(require('ui/tabs/ui/UITab'));
 	tabGroup.addTab(require('ui/tabs/crud/CrudTab'));
 	
 	tabGroup.open();
@@ -38,18 +38,23 @@ function buildCustomTabGroupForAndroid()
 	var window = Titanium.UI.createWindow({backgroundColor:colors.background, fullscreen:false, tabBarHidden: true});
 	
 	var locationView = require('ui/tabs/location/LocationView');
+	locationView.backgroundColor = colors.colorLocation;
 	setViewParams(locationView);
 	
 	var notificationsView = require('ui/tabs/notifications/NotificationsView'); 
+	notificationsView.backgroundColor = colors.colorNotifications;
 	setViewParams(notificationsView);
 	
 	var webView = require('ui/tabs/web/WebView'); 
+	webView.backgroundColor = colors.colorWeb;
 	setViewParams(webView);
 	
-	var advancedView = require('ui/tabs/advanced/AdvancedView'); 
-	setViewParams(advancedView);
+	var UIView = require('ui/tabs/ui/UIView'); 
+	UIView.backgroundColor = colors.colorAdvanced;
+	setViewParams(UIView);
 	
 	var crudView = require('ui/tabs/crud/CrudView'); 
+	crudView.backgroundColor = colors.colorSettings;
 	setViewParams(crudView);
 	
 	//Optional: create tabs that describe each window content
@@ -60,7 +65,7 @@ function buildCustomTabGroupForAndroid()
 		bottom:0,
 		height: Util.getTabGroupHeightDp(),
 		width: Ti.UI.FILL,
-		backgroundColor: colors.colorWeb,
+		backgroundColor: colors.background,
 		layout: 'horizontal'
 	});
 	
@@ -130,27 +135,27 @@ function buildCustomTabGroupForAndroid()
 	tabWeb.add(imageViewWeb);
 	tabWeb.add(labelWeb);
 	
-		//TAB ADVANCED
-	var tabAdvanced = Ti.UI.createView(
+		//TAB UI
+	var tabUI = Ti.UI.createView(
 		{
-			id: 'advanced', 
+			id: 'ui', 
 			layout: 'vertical',
 			width: '20%',
 			left: 0,
 			height: Ti.UI.FILL
 			});
-	var imageViewAdvanced = Ti.UI.createImageView({image: 'assets/images/advanced@3x.png', intColor: colors.text, top: "4dp",width: "28dp", height: "28dp"});
-	var labelAdvanced = Ti.UI.createLabel(
+	var imageViewUI = Ti.UI.createImageView({image: 'assets/images/advanced@3x.png', intColor: colors.text, top: "4dp",width: "28dp", height: "28dp"});
+	var labelUI = Ti.UI.createLabel(
 		{
-			text:Ti.Locale.getString('advanced', 'advanced str.'), 
+			text:Ti.Locale.getString('ui', 'ui str.'), 
 			textAlign: Ti.UI.TEXT_ALIGNMENT_CENTER, 
 			font: {fontSize: 12}, 
 			color: 'black', 
 			width: Ti.UI.FILL, 
 			bottom: 0
 		});
-	tabAdvanced.add(imageViewAdvanced);
-	tabAdvanced.add(labelAdvanced);
+	tabUI.add(imageViewUI);
+	tabUI.add(labelUI);
 	
 			//TAB CRUD
 	var tabCrud = Ti.UI.createView(
@@ -178,7 +183,7 @@ function buildCustomTabGroupForAndroid()
 	customTabGroup.add(tabLocation);
 	customTabGroup.add(tabNotifications);
 	customTabGroup.add(tabWeb);
-	customTabGroup.add(tabAdvanced);
+	customTabGroup.add(tabUI);
 	customTabGroup.add(tabCrud);
 	
 	window.add(customTabGroup);
@@ -192,8 +197,8 @@ function buildCustomTabGroupForAndroid()
 	window.add(webView);
 	webView.hide();
 	
-	window.add(advancedView);
-	advancedView.hide();
+	window.add(UIView);
+	UIView.hide();
 	
 	window.add(crudView);
 	crudView.hide();
@@ -204,7 +209,7 @@ function buildCustomTabGroupForAndroid()
 	{
 		notificationsView.hide();
 		webView.hide();
-		advancedView.hide();
+		UIView.hide();
 		crudView.hide();
 		locationView.show();
 		console.log("mensaje adjunto: " + e.message);
@@ -213,12 +218,12 @@ function buildCustomTabGroupForAndroid()
 		imageViewLocation.tintColor = colors.accent;
 		imageViewNotifications.tintColor = colors.text;
 		imageViewWeb.tintColor = colors.text;
-		imageViewAdvanced.tintColor = colors.text;
+		imageViewUI.tintColor = colors.text;
 	}
 	function showNotifications(e)
 	{
 		webView.hide();
-		advancedView.hide();
+		UIView.hide();
 		crudView.hide();
 		locationView.hide();
 		notificationsView.show();
@@ -228,12 +233,12 @@ function buildCustomTabGroupForAndroid()
 		imageViewLocation.tintColor = colors.text;
 		imageViewNotifications.tintColor = colors.accent;
 		imageViewWeb.tintColor = colors.text;
-		imageViewAdvanced.tintColor = colors.text;
+		imageViewUI.tintColor = colors.text;
 	}
 	function showWeb(e)
 	{
 		notificationsView.hide();
-		advancedView.hide();
+		UIView.hide();
 		crudView.hide();
 		locationView.hide();
 		webView.show();
@@ -243,29 +248,29 @@ function buildCustomTabGroupForAndroid()
 		imageViewLocation.tintColor = colors.text;
 		imageViewNotifications.tintColor = colors.text;
 		imageViewWeb.tintColor = colors.accent;
-		imageViewAdvanced.tintColor = colors.text;
+		imageViewUI.tintColor = colors.text;
 		
 	}
-	function showAdvanced(e)
+	function showUI(e)
 	{
 		notificationsView.hide();
 		webView.hide();
 		crudView.hide();
 		locationView.hide();
-		advancedView.show();
+		UIView.show();
 		console.log("mensaje adjunto: " + e.message);
 		
 		imageViewCrud.tintColor = colors.text;
 		imageViewLocation.tintColor = colors.text;
 		imageViewNotifications.tintColor = colors.text;
 		imageViewWeb.tintColor = colors.text;
-		imageViewAdvanced.tintColor = colors.accent;
+		imageViewUI.tintColor = colors.accent;
 	}
 	function showCrud(e)
 	{
 		notificationsView.hide();
 		webView.hide();
-		advancedView.hide();
+		UIView.hide();
 		locationView.hide();
 		crudView.show();
 		console.log("mensaje adjunto: " + e.message);
@@ -273,7 +278,7 @@ function buildCustomTabGroupForAndroid()
 		imageViewLocation.tintColor = colors.text;
 		imageViewNotifications.tintColor = colors.text;
 		imageViewWeb.tintColor = colors.text;
-		imageViewAdvanced.tintColor = colors.text;
+		imageViewUI.tintColor = colors.text;
 	}
 	
 	var tabRouter = 
@@ -281,7 +286,7 @@ function buildCustomTabGroupForAndroid()
 		goLocation : showLocation,
 		goNotifications : showNotifications,
 		goWeb: showWeb,
-		goAdvanced: showAdvanced,
+		goUI: showUI,
 		goCrud: showCrud
 	};
 	
@@ -290,7 +295,7 @@ function buildCustomTabGroupForAndroid()
 	tabLocation.addEventListener("click", showLocation);
 	tabNotifications.addEventListener("click", showNotifications);
 	tabWeb.addEventListener("click", showWeb);
-	tabAdvanced.addEventListener("click", showAdvanced);
+	tabUI.addEventListener("click", showUI);
 	tabCrud.addEventListener("click", showCrud);
 	
 	window.open();

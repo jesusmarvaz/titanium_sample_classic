@@ -203,7 +203,8 @@ Fichero de configuración de la aplicación
     <analytics>true</analytics>
     <guid>c9012aa6-5248-40e1-9bbb-546fb5d2dbed</guid>
     <property name="ti.ui.defaultunit" type="string">dp</property>
-    <property name="run-on-main-thread" type="bool">true</property>   
+    <property name="run-on-main-thread" type="bool">true</property>
+    <property name="url" type="string">http://jesusmarvaz.hopto.org:9100/api/videodata/</property>  
     <modules>
         <module platform="android">ti.playservices</module>
         <module>ti.map</module>
@@ -227,7 +228,7 @@ Fichero de configuración de la aplicación
 Podemos acceder a las etiquetas `<property>` así: 
 
 ```
-var foo = Ti.App.Properties.getString('foo');
+var url = Ti.App.Properties.getString('url');
 ```
 
 Más documentación:
@@ -338,7 +339,18 @@ Para activar programáticamente un evento y simular, por ejemplo, un click (`cli
 
 ## Elementos gráficos
 
+**Sombras (shadow)**
 
+- En vistas:
+```
+{...
+viewShadowColor:        
+COLOR.shadow,
+viewShadowOffset:       { x: 6, y: 10 },
+viewShadowRadius:       12,
+elevation:              8
+...}
+```
 
 ## Location
 

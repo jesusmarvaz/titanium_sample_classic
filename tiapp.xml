@@ -13,6 +13,7 @@
     <guid>c9012aa6-5248-40e1-9bbb-546fb5d2dbed</guid>
     <property name="ti.ui.defaultunit" type="string">dp</property>
     <property name="run-on-main-thread" type="bool">true</property>
+    <property name="url" type="string">http://jesusmarvaz.hopto.org:9100/api/videodata/</property>
     <ios>
         <enable-launch-screen-storyboard>true</enable-launch-screen-storyboard>
         <use-app-thinning>true</use-app-thinning>

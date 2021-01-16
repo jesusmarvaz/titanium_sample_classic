@@ -3,7 +3,7 @@
 	<string name="location">Localización</string>
 	<string name="notifications">Notificaciones</string>
 	<string name="web">Web</string>
-	<string name="advanced">Avanzado</string>
+	<string name="ui">Items IU</string>
 	<string name="crud">CRUD</string>
 	<string name="mylocation">Mi posición</string>
 	<string name="location_permission_denied">Permiso de localización denegado</string>

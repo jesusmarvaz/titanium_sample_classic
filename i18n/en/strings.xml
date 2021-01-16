@@ -3,7 +3,7 @@
 	<string name="location">Location</string>
 	<string name="notifications">Notifications</string>
 	<string name="web">Web</string>
-	<string name="advanced">Advanced</string>
+	<string name="ui">UI Items</string>
 	<string name="crud">CRUD</string>
 	<string name="mylocation">My location</string>
 	<string name="location_permission_denied">Location permission denied</string>
