@@ -12,7 +12,39 @@ VideoModel.getVideos = function(callback){
 	if(callback)
 	{
 		this.GET({}, function(result){
-			if(result){ Cache.set('videos', JSON.parse(result)); callback(result); }
+			//if(result){ Cache.set('videos', JSON.parse(result)); callback(result); }
+			if(result)
+			{
+				var videos = [];
+				console.log(result);
+				var videosApi = JSON.parse(result);
+				console.log(videosApi);
+				if(Array.isArray(videosApi)){console.log("is array");}
+				else { console.log("it is not an array"); }
+				/*for(var video in videosApi)
+				{
+					console.log("item stringified: "+JSON.stringify(video));
+					var movie = {};
+					movie.id = video.id;
+					movie.title = video.title;
+					movie.description = video.description;
+					movie.url_background = video.url_background;
+					videos.push(movie);
+				}*/
+				
+				for(var i = 0; i < videosApi.length; i++)
+				{
+					var video = videosApi[i];
+					var movie = {};
+					movie.id = video['id'];
+					movie.title = video['title'];
+					movie.description = video['description'];
+					movie.url_background = video['url_background'];
+					videos.push(movie);
+				}
+				Cache.set('videos', videos);
+				callback(videos);
+			}
 			else{ alert('no result in call'); }
 	});
 	}else{alert('no valid callback');}

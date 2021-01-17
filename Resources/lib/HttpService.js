@@ -19,9 +19,7 @@ var RestService = function(url) {
  * @param {UserModel} authentication
  */
 RestService.prototype.httpRequest = function(method, url, sendData, callback, authentication) {
-    var online = Ti.Network.getOnline();
- 
-    if (!online) {
+    if (!Titanium.Network.online) {
         alert('This feature requires an internet connection and no active connection is found!');
         return false;   
     }

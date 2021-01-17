@@ -19,6 +19,15 @@
         <use-app-thinning>true</use-app-thinning>
         <plist>
             <dict>
+            	<key>NSAppTransportSecurity</key>
+		        <dict>
+		          <!-- 1) Default: Disable ATS completely -->
+		          <key>NSAllowsArbitraryLoads</key>
+		          <true/>
+	              <!-- Allow HTTP connections -->
+	              <key>NSExceptionAllowsInsecureHTTPLoads</key>
+	              <true/>
+		        </dict>
                 <key>UISupportedInterfaceOrientations~iphone</key>
                 <array>
                     <string>UIInterfaceOrientationPortrait</string>

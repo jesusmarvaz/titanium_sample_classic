@@ -214,7 +214,7 @@ var builder =
 		var screenHeightDp = Util.getScreenHeightDp();
 		var mainView = Ti.UI.createView({layout: 'vertical', height: Ti.UI.FILL, width: Ti.UI.FILL, top:0, backgroundColor: '#000000'});
 		var toolbar = Ti.UI.createView({/*layout: 'horizontal',*/ height: '71dp', width: Ti.UI.FILL, top:0, backgroundColor: '#cfcfcf',
-		viewShadowColor: '#3fbf81', viewShadowOffset: {x:0, y:8}, viewShadowRadius: 4, zIndex: 4/*, shadowOpacity: 0.5*/});
+		viewShadowColor: '#3fbf81', viewShadowOffset: {x:0, y:0}, viewShadowRadius: 4, zIndex: 4/*, shadowOpacity: 0.5*/});
 		/*btn.setShadow({
     shadowRadius:10,
     shadowOpacity:0.5,
