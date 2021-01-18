@@ -206,8 +206,8 @@ var builder =
 	/**
 	 * @param {String} title - Title to show centered in the customToolbar
 	 * @param {Object} window - Window to close when toolbar backButton is pressed
-	 * @param {String} icon - Path to an optional icon to add (32 x 32)dp
-	 * @return {Object} mainView of the toolbar
+	 * @param {String} icon - Path to an optional icon to add (24 x 24)dp
+	 * @return {Object} mainView with the toolbar
 	 */
 	verticalViewWithToolbar : function(title, window, icon){
 		var Util = require('lib/Util');
@@ -225,6 +225,55 @@ var builder =
 		{
 			//image: "assets/images/arrow@3x.png",
 			//backgroundImage: "assets/images/arrow@3x.png", 
+			title: "cerrar",
+			text: "x",
+			color: "white",
+			height: '40dp',
+			width: '80dp',
+			left: '16dp',
+			top: '30dp'
+		});
+
+		var titleTv = Ti.UI.createLabel({text: title, color: '#000000', font: {fontSize: 18}, 
+			top: '38dp', width: '100%', textAlign: Ti.UI.TEXT_ALIGNMENT_CENTER});
+			toolbar.add(titleTv);
+		
+		backButton.addEventListener('click', function(e){window.close();});
+		toolbar.add(backButton);
+		if(icon != null)
+		{
+			var iconTv = Ti.UI.createImageView({
+				image : icon,
+				height: '24dp',
+				width: '24dp',
+				left: '48dp',
+				top: '40dp'
+			});
+			toolbar.add(iconTv);
+		}
+		
+		mainView.add(toolbar);
+		mainView.add(bottomBorder);
+		
+		return mainView;
+	},
+	/** returns view with a toolbar
+	 * @param {String} title - Title to show centered in the customToolbar
+	 * @param {Object} window - Window to close when toolbar backButton is pressed
+	 * @param {String} icon - Path to an optional icon to add (24 x 24)dp
+	 * @return {Object} mainView with the toolbar
+	 */
+	viewWithToolbar : function(title, window, icon)
+	{
+		var Util = require('lib/Util');
+		var screenHeightDp = Util.getScreenHeightDp();
+		var mainView = Ti.UI.createView({layout: 'horizontal', height: Ti.UI.FILL, width: Ti.UI.FILL, top:0, backgroundColor: '#000000'});
+		var toolbar = Ti.UI.createView({/*layout: 'horizontal',*/ height: '71dp', width: '100%', top:0, backgroundColor: '#cfcfcf',
+		viewShadowColor: '#3fbf81', viewShadowOffset: {x:0, y:0}, viewShadowRadius: 4, zIndex: 4/*, shadowOpacity: 0.5*/});
+
+		var bottomBorder = Ti.UI.createView({width: Ti.UI.FILL, height: "1dp", bottom: 0, backgroundColor: '#3fbf81'});
+		var backButton = Ti.UI.createButton(
+		{
 			title: "cerrar",
 			text: "x",
 			color: "white",

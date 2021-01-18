@@ -17,10 +17,7 @@
 		webCtrl.launchWebViewWindow('https://www.google.com/');
 	});
 	
-	var buttonListMovies = uibuilder.buttonRounded("lista películas", function(){
-		var window = require('/ui/windows/ListMovies').self;
-		window.open();
-	});
+	var buttonListMovies = uibuilder.buttonRounded("lista películas", function(){ webCtrl.launchVideoList();});
 	//var buttonLocal = uibuilder.buttonRounded("local web", function(){});
 	buttonLocal.top = top;
 	buttonRemote.top = top;

@@ -3,14 +3,14 @@ var http = require('lib/HttpService');
 var endpoints = require('lib/Endpoints').all;
 var videoModel = require('model/VideoModel');
 var Cache = require('lib/Cache');
+var Util = require('lib/Util');
+var controller = null;
 
-var videoId = "";
+function setController(contr)
+{
+	controller = contr;
+}
 
-var self = Ti.UI.createWindow({
-	title: "Lista películas",
-	backgroundColor: '#387593'
-});
-var mainView = uibuilder.verticalViewWithToolbar("lista pelis", self, 'assets/images/web@2x.png');
 var label = Ti.UI.createLabel({ 
 	font: {fontSize: 16}, 
 	top: 10,
@@ -21,18 +21,32 @@ var label = Ti.UI.createLabel({
 	});
 	
 var backgroundView = Ti.UI.createView({layout:'vertical', backgroundColor: 'gray', top: 0, width: '100%', height: '100%'});
-
 backgroundView.add(label);
-mainView.add(backgroundView);
-self.add(mainView);
 
 videoModel.getVideos(function(result){ hello(backgroundView, result);} );
-
-function setSelectedId(id){videoId = id;}
-
-function getSelectedId(){
-	console.log("videoId stored: " + videoId);
-	return videoId;}
+	
+/**
+ * Gets video url by id
+ * @param {String} id - the video Id
+ * @return {String}
+ */
+function fetchVideoUrlById(id)
+{
+	var videosApi = Cache.get('videos');
+	var url = null;
+	for(var i = 0; i<videosApi.length; i++)
+	{
+		var video = videosApi[i];
+		if(video['id'] === id)
+		{
+			url = endpoints.urlMediaBase + video.url;
+			console.log("url fetched: " + url);
+			return url;
+		}
+	}
+	
+	return url;
+}
 
 
 function hello(view, result)
@@ -94,19 +108,41 @@ function hello(view, result)
     	defaultItemTemplate: 'template',
 		sections: [listSection]});
 		
-	listView.addEventListener('itemclick', function(evt){
+	function launchPlayer(evt){
 		var videosApi = Cache.get('videos');
 		var id = videosApi[evt.itemIndex]['id'];
-		console.log("id::" + id);
-		setSelectedId(id);
-		var windowPlayer = require('ui/windows/VideoViewer').self;
-		var play = require('ui/windows/VideoViewer').play;
-		windowPlayer.open();
-		play();
+		var viewPlayer = require('ui/windows/movies/VideoViewer').self;
+		var play = require('ui/windows/movies/VideoViewer').play;
+		var window = Ti.UI.createWindow({
+			title: "VideoViewer",
+			backgroundColor: '#387593',
+			orientation : Ti.UI.PORTRAIT,
+			orientationModes : [Ti.UI.PORTRAIT]
 		});
+		var mainView = uibuilder.verticalViewWithToolbar("PELIS", window, null);
+		mainView.add(viewPlayer);
+		window.add(mainView);
+		window.open();
+		play(fetchVideoUrlById(id));
+	}
+		
+	listView.addEventListener('itemclick', function(evt)
+		{
+			if(Util.isTablet())
+			{
+				if(controller)
+				{ 
+					var videosApi = Cache.get('videos');
+					controller.play(fetchVideoUrlById(videosApi[evt.itemIndex]['id'])); 
+				}
+			}else
+			{
+				launchPlayer(evt);
+			}
+		}
+	);
 	view.add(listView);
 }
 
-exports.self = self;
-exports.getSelectedId = getSelectedId;
-exports.setSelectedId = setSelectedId;
+exports.self = backgroundView;
+exports.setController = setController;
