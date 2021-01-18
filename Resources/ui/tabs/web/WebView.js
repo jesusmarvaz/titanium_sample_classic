@@ -18,7 +18,7 @@
 	});
 	
 	var buttonListMovies = uibuilder.buttonRounded("lista películas", function(){
-		var window = require('/ui/windows/ListMovies');
+		var window = require('/ui/windows/ListMovies').self;
 		window.open();
 	});
 	//var buttonLocal = uibuilder.buttonRounded("local web", function(){});

@@ -213,7 +213,7 @@ var builder =
 		var Util = require('lib/Util');
 		var screenHeightDp = Util.getScreenHeightDp();
 		var mainView = Ti.UI.createView({layout: 'vertical', height: Ti.UI.FILL, width: Ti.UI.FILL, top:0, backgroundColor: '#000000'});
-		var toolbar = Ti.UI.createView({/*layout: 'horizontal',*/ height: '71dp', width: Ti.UI.FILL, top:0, backgroundColor: '#cfcfcf',
+		var toolbar = Ti.UI.createView({/*layout: 'horizontal',*/ height: '71dp', width: '100%', top:0, backgroundColor: '#cfcfcf',
 		viewShadowColor: '#3fbf81', viewShadowOffset: {x:0, y:0}, viewShadowRadius: 4, zIndex: 4/*, shadowOpacity: 0.5*/});
 		/*btn.setShadow({
     shadowRadius:10,
@@ -223,13 +223,15 @@ var builder =
 		var bottomBorder = Ti.UI.createView({width: Ti.UI.FILL, height: "1dp", bottom: 0, backgroundColor: '#3fbf81'});
 		var backButton = Ti.UI.createButton(
 		{
-			image: "assets/images/arrow@3x.png",
-			backgroundImage: "assets/images/arrow@3x.png", 
-			tintColor: "white",
-			height: '24dp',
-			width: '24dp',
+			//image: "assets/images/arrow@3x.png",
+			//backgroundImage: "assets/images/arrow@3x.png", 
+			title: "cerrar",
+			text: "x",
+			color: "white",
+			height: '40dp',
+			width: '80dp',
 			left: '16dp',
-			top: '40dp'
+			top: '30dp'
 		});
 
 		var titleTv = Ti.UI.createLabel({text: title, color: '#000000', font: {fontSize: 18}, 

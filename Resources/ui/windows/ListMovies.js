@@ -4,6 +4,8 @@ var endpoints = require('lib/Endpoints').all;
 var videoModel = require('model/VideoModel');
 var Cache = require('lib/Cache');
 
+var videoId = "";
+
 var self = Ti.UI.createWindow({
 	title: "Lista películas",
 	backgroundColor: '#387593'
@@ -24,10 +26,14 @@ backgroundView.add(label);
 mainView.add(backgroundView);
 self.add(mainView);
 
-videoModel.getVideos(function(result){
-	console.log("result:: " + result['id']);
-	hello(backgroundView, result);
-});
+videoModel.getVideos(function(result){ hello(backgroundView, result);} );
+
+function setSelectedId(id){videoId = id;}
+
+function getSelectedId(){
+	console.log("videoId stored: " + videoId);
+	return videoId;}
+
 
 function hello(view, result)
 {
@@ -65,7 +71,7 @@ function hello(view, result)
 	var moviesDataSet = [];
 	var videosApi = Cache.get('videos');
 	//var videosApi = result;
-	console.log("Result: " +  JSON.stringify(videosApi[0]['id']));
+	
 	for(var i = 0; i<videosApi.length; i++)
 	{
 		var video = videosApi[i];
@@ -89,9 +95,18 @@ function hello(view, result)
 		sections: [listSection]});
 		
 	listView.addEventListener('itemclick', function(evt){
-		console.log("click en item!; " + evt.itemIndex);
-	});
+		var videosApi = Cache.get('videos');
+		var id = videosApi[evt.itemIndex]['id'];
+		console.log("id::" + id);
+		setSelectedId(id);
+		var windowPlayer = require('ui/windows/VideoViewer').self;
+		var play = require('ui/windows/VideoViewer').play;
+		windowPlayer.open();
+		play();
+		});
 	view.add(listView);
 }
 
-module.exports = self;
+exports.self = self;
+exports.getSelectedId = getSelectedId;
+exports.setSelectedId = setSelectedId;

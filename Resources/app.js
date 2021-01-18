@@ -16,6 +16,7 @@ function buildTabGroupForIOS()
 	tabGroup.addTab(require('ui/tabs/crud/CrudTab'));
 	
 	tabGroup.open();
+	tabGroup.setActiveTab(2);
 	module.exports = tabGroup; 
 }
 
@@ -299,6 +300,7 @@ function buildCustomTabGroupForAndroid()
 	tabCrud.addEventListener("click", showCrud);
 	
 	window.open();
+	tabRouter.goWeb({message: "web: this is a test message"});
 		
 	module.exports = tabRouter;
 }

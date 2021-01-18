@@ -10,7 +10,7 @@
         if (e.success) {
             alert('Subscribed');
         } else {
-            alert('Error:\n' + ((e.error && e.message) || JSON.stringify(e)));
+            console.log('Error:\n' + ((e.error && e.message) || JSON.stringify(e)));
         }
     });
 	};
@@ -23,7 +23,7 @@
         if (e.success) {
             alert('Unsubscribed');
         } else {
-            alert('Error:\n' + ((e.error && e.message) || JSON.stringify(e)));
+           console.log('Error:\n' + ((e.error && e.message) || JSON.stringify(e)));
         }
     });
 	};

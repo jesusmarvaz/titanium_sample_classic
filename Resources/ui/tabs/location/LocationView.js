@@ -4,6 +4,8 @@
 	var isAndroid = Util.isAndroid();
 	var colors = require('styles/colors').all;
 	
+
+	
 	var LocationCtrl = require('ui/tabs/location/LocationCtrl');
 	var locationCtrl = new LocationCtrl();
 	var sliderFrequency, sliderAccuracy = null;
@@ -15,11 +17,17 @@
   		//backgroundColor: colors.background
 	});
 	
+	var title1 = UIBuilder.labelCentered(scrollView, '5dp');
+	title1.text = Ti.Locale.getString('location','');
+	title1.font = {fontSize:22, fontWeight: "bold"};
+	
+	scrollView.add(title1);
+	
 	
 	var text = Ti.Locale.getString('mylocation', 'error str.');
 	
 	var button = UIBuilder.buttonRounded(text, locationCtrl.tryGetLocation);
-	button.top = '20dp';
+	button.top = '35dp';
 	scrollView.add(button);
 	
 	var listenerFrequency = function(e){

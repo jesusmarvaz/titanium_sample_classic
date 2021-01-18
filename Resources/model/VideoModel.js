@@ -16,9 +16,7 @@ VideoModel.getVideos = function(callback){
 			if(result)
 			{
 				var videos = [];
-				console.log(result);
 				var videosApi = JSON.parse(result);
-				console.log(videosApi);
 				if(Array.isArray(videosApi)){console.log("is array");}
 				else { console.log("it is not an array"); }
 				/*for(var video in videosApi)
@@ -40,6 +38,7 @@ VideoModel.getVideos = function(callback){
 					movie.title = video['title'];
 					movie.description = video['description'];
 					movie.url_background = video['url_background'];
+					movie.url = video['url_hi_res'];
 					videos.push(movie);
 				}
 				Cache.set('videos', videos);

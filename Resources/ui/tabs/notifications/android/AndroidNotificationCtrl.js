@@ -16,7 +16,7 @@
 	    deviceToken = e.deviceToken;
 	}
 	function deviceTokenError(e) {
-	    alert('Failed to register for push notifications! ' + e.error);
+	    console.log('Failed to register for push notifications! ' + e.error);
 	}
   
 	// Process incoming push notifications
