@@ -336,20 +336,59 @@ Para activar programáticamente un evento y simular, por ejemplo, un click (`cli
 |closeWindow|Se lanza nueva Activity o View| `Ti.App.addEventListener('closeWindow', function(e){...});`|
 |click|click sobre una vista| `button.addEventListener('click', function(e){...});`|
 |change|Cambio del valor asociado a un elemento, como un switch o slider| `slider.addEventListener('change', function(e){...});`|
+|itemclick|Click en elemento de ListView| `listView.addEventListener('itemclick', function(evt){controller.play(fetchVideoUrlById(videosApi[evt.itemIndex]['id'])); })`|
 
 ## Elementos gráficos
 
+**Window**
+
+```
+Ti.UI.createWindow(
+    {
+        orientation: Ti.UI.LANDSCAPE_LEFT, 
+        orientationModes: [Ti.UI.LANDSCAPE_LEFT, Ti.UI.LANDSCAPE_RIGHT], 
+        fullscreen: false,
+        title: 'title',
+	    navBarHidden : true, //default is false, esto oculta la barra de navegación. 
+        backgroundColor:colors.background,
+        tabBarHidden: true
+    }
+)
+```
+
+**Creación de vistas genéricas y como contenedores**
+
+Las vistas pueden usarse pueden usarse como contenedores de otras vistas. Propiedades:
+- `layout: 'vertical|horizontal`: si está presente, los elementos se colocan uno al lado del otro, y los márgenes (top, bottom, left, right) entonces serán **relativos** al último elemento añadido, si no está presente los márgenes serán **absolutos** al contenedor.
+
+```
+Ti.UI.createView(
+		{
+			id: 'location', 
+			layout: 'vertical',
+			width: '20%',
+			left: 0,
+			height: Ti.UI.FILL,
+            backgroundImage: 'path/image.jpg'
+		});
+```
+
 **Sombras (shadow)**
 
-- En vistas:
+- En vistas geneéricas o contenedores (`Ti.UI.createView`):
 ```
 {...
-viewShadowColor:        
-COLOR.shadow,
+viewShadowColor:        COLOR.shadow,
 viewShadowOffset:       { x: 6, y: 10 },
 viewShadowRadius:       12,
 elevation:              8
 ...}
+```
+
+- En buttons, labels y resto de elementos de UI, las propiedades serán:
+
+```
+shadowColor, shadowOffset, shadowRadius
 ```
 
 ## Location
